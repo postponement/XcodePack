@@ -1,6 +1,6 @@
 #!/bin/bash
-
-#author  liuyanchi
+#shell脚本,支持全路径,任何xcode项目可用,只需一键 sh pack.sh  运行,即可打包成功,会存放在桌面生成的payload文件中.希望能帮你节省时间,渴望你的小✨✨
+#author ---- liuyanchi
 
 echo $PWD
 
