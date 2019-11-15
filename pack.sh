@@ -6,11 +6,9 @@ echo $PWD
 
 echo $HOME
 
-var=""
-var1=""
 timeInterval=0			#时间间隔
 tempTime=`date +%s`		#当前时间戳
-fimeName=""				#临时文件名
+fileName=""				#临时文件名
 
 
 #-------------------删除多余文件-------------------
@@ -49,12 +47,11 @@ macName=/Users/$macName/Library/Developer/Xcode/DerivedData
 
 cd $macName
 
-read -p "请输入打包项目名(区分大小写):" var
+read -p "请输入打包项目名(区分大小写):" var2
 
-var=$var-
 for file in *; do
 
-	if [[ $file =~ $var ]]; then
+	if [[ $file =~ $var2 ]]; then
 
 		#文件去重 当前时间-文件修改时间
 		modifyTime=`stat -f %c $file`
@@ -62,13 +59,13 @@ for file in *; do
 		currentTime=`date +%s`
 		timeInterval=$((currentTime-modifyTime))
 		if [[ $tempTime -gt $timeInterval ]]; then
-		fimeName=$file
+		fileName=$file
 		tempTime=$timeInterval
 		fi
 	fi
 done
 
-macName=$macName/$fimeName/Build/Products
+macName=$macName/$fileName/Build/Products
 
 cd ~
 cd $macName
@@ -83,9 +80,8 @@ else
 	exit 1
 fi
 
-
 #-------------------生成IPA文件-------------------
-cp -R QEZB.app $filePath
+cp -R ${var2}.app $filePath
 
 cd ~
 
@@ -99,7 +95,7 @@ mv Payload.ipa Payload
 rm -rf Payload.zip
 
 cd Payload
-rm -rf QEZB.app
+rm -rf ${var2}.app
 
 echo "-------------$objc pack success!!-----------------"
 
