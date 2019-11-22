@@ -22,22 +22,23 @@ packFunction(){
 	fi
 }
 
+#-------------------查找主工程名称-------------------
+
+for file in *; do
+	if [[ $file =~ ".xcworkspace" ]]; then
+		workSpaceName=$file
+		break
+	fi
+done
+length=${#workSpaceName}
+length=$(($length-12))
+
+projectName=${workSpaceName:0:length}
+
 #-------------------xcode项目编译-------------------
 read -p "是否需要打开编译项目:" var2
-
 if [[ $var2 == "y" ]]; then
-	for file in *; do
-		if [[ $file =~ ".xcworkspace" ]]; then
-			workSpaceName=$file
-			break
-		fi
-	done
 	open $workSpaceName
-	length=${#workSpaceName}
-	length=$(($length-12))
-
-	projectName=${workSpaceName:0:length}
-
 	read -p "是否编译项目(编译需要时间等待):" var3
 	if [[ $var3 == "y" ]]; then
 		#编译项目
@@ -93,7 +94,6 @@ cd $macName
 for file in *; do
 
 	if [[ $file =~ $projectName ]]; then
-
 		#文件去重 当前时间-文件修改时间
 		modifyTime=`stat -f %c $file`
 		# echo "modifyTime====$modifyTime : $file"
