@@ -15,14 +15,30 @@ echo $PWD
 ls
 
 packFunction(){
-	read -p "是否继续打包:" var1
+	read -p "是否继续打包(y/n or Y/N):" var1
+	commandJudge $var1
 	if [[ $var1 != "y" ]]; then
 		echo "===========end package==========="
 		exit 0
 	fi
 }
 
+commandJudge(){
+	if [[ $1 == "y" || $1 == "n" || $1 == "N" || $1 == "Y" ]]; then
+		echo 
+	else
+		echo "输入指令错误,请输入(y/n) or (Y/N)"
+		exit 1
+	fi
+}
+
 #-------------------查找主工程名称-------------------
+if [[ -f "autoPackage.sh" ]]; then
+	echo ""
+else
+	echo "\033[5;31m 当前脚本不在工程目录下,请放在.xcworkspace 同级目录下 \033[0m"
+	exit 1;
+fi
 
 for file in *; do
 	if [[ $file =~ ".xcworkspace" ]]; then
@@ -36,10 +52,12 @@ length=$(($length-12))
 projectName=${workSpaceName:0:length}
 
 #-------------------xcode项目编译-------------------
-read -p "是否需要打开编译项目:" var2
+read -p "是否需要打开编译项目(y/n or Y/N):" var2
+commandJudge $var2
 if [[ $var2 == "y" ]]; then
 	open $workSpaceName
-	read -p "是否编译项目(编译需要时间等待):" var3
+	read -p "是否编译项目(编译需要时间等待)(y/n or Y/N):" var3
+	commandJudge $var3
 	if [[ $var3 == "y" ]]; then
 		#编译项目
 		xcodebuild build -workspace $workSpaceName -scheme $projectName
@@ -68,7 +86,8 @@ filePath=$HOME/Desktop/Payload
 
 cd Payload
 
-read -p "是否删除以前生成的Payload.ipa文件(y/n):" va4
+read -p "是否删除以前生成的Payload.ipa文件(y/n or Y/N):" va4
+commandJudge $va4
 if [[ $va4 == "y" ]]; then
 
 	for file in *; do
